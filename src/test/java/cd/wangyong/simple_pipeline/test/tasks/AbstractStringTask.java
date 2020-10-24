@@ -1,6 +1,7 @@
 package cd.wangyong.simple_pipeline.test.tasks;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,8 @@ public abstract class AbstractStringTask implements PipeTaskNode {
     public PipeValueObj execute(List<PipeValueObj> inputs) {
         logger.info("Node-{}:task execute.", id());
         try {
+            TimeUnit.SECONDS.sleep(2);
+
             if (CollectionUtils.isEmpty(inputs)) {
                 return PipeValueObj.success("Node-" + id() + " execute success.\n");
             }
