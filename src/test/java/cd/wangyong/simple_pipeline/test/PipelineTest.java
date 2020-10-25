@@ -96,4 +96,26 @@ public class PipelineTest {
         props.put(10, Collections.emptyList());
         return props;
     }
+
+    @Test()
+    public void testIncrementPipeline() throws ExecutionException, InterruptedException {
+        // 异步执行流向线，阻塞获取
+        Properties props = getIncrementProperties();
+        PipeValueObj result = Pipeline.build("integer_increment", 1, props)
+                .executeAsync(1)
+                .get();
+        logger.info("Pipeline execute result:\n{}", result.getValue());
+    }
+
+    private Properties getIncrementProperties() {
+        // read pipeline config
+        Properties props = new Properties();
+        props.put(1, Arrays.asList(2, 4));
+        props.put(2, Collections.singletonList(3));
+        props.put(3, Collections.singletonList(6));
+        props.put(4, Collections.singletonList(5));
+        props.put(5, Collections.singletonList(6));
+        props.put(6, Collections.emptyList());
+        return props;
+    }
 }

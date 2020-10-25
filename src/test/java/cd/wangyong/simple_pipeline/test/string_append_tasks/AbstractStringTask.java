@@ -1,4 +1,4 @@
-package cd.wangyong.simple_pipeline.test.tasks;
+package cd.wangyong.simple_pipeline.test.string_append_tasks;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;

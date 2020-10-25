@@ -1,6 +1,7 @@
 package cd.wangyong.simple_pipeline;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -47,6 +48,11 @@ public class Pipeline {
      * 结点任务执行Future备忘录
      */
     private final Map<PipeTaskNode, CompletableFuture<PipeValueObj>> futureMemoMap = new ConcurrentHashMap<>();
+
+    /**
+     * 初始输入
+     */
+    private Object[] initInputs;
 
     /**
      * 性能优化，如果已经确定前面结点已经执行失败，则后续结点任务无需执行
@@ -104,9 +110,11 @@ public class Pipeline {
 
     /**
      * 任务执行相当于无环有向图的遍历（BFS）
+     * @param inputs 入参
      */
-    public CompletableFuture<PipeValueObj> executeAsync() {
+    public CompletableFuture<PipeValueObj> executeAsync(Object ...inputs) {
         // 从头结点触发执行
+        this.initInputs = inputs;
         return execute(header);
     }
 
@@ -146,7 +154,7 @@ public class Pipeline {
                 // 获取前驱结点Future
                 List<PipeTaskNode> preNodes = preNodeMap.get(node);
                 if (CollectionUtils.isEmpty(preNodes)) {
-                    future = buildExecuteFuture(node, null);
+                    future = buildExecuteFuture(node, buildInputs(initInputs));
                 }
                 else {
                     int size = preNodes.size();
@@ -169,6 +177,12 @@ public class Pipeline {
             }
         }
         return future;
+    }
+
+    private List<PipeValueObj> buildInputs(Object[] initInputs) {
+        if (initInputs == null || initInputs.length == 0)
+            return Collections.emptyList();
+        return Arrays.stream(initInputs).map(PipeValueObj::success).collect(Collectors.toList());
     }
 
     private CompletableFuture<PipeValueObj> buildExecuteFuture(PipeTaskNode pipeTaskNode, List<PipeValueObj> inputParams) {
