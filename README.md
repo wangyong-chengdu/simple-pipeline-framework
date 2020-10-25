@@ -1,6 +1,9 @@
 # simple-pipeline-framework(任务流水线框架)
-Async execute pipeline task which API is simple.
-
+## Feature
+- 流水线结点可配置。
+- 前驱结点驱动后置结点任务提交。
+- 全异步化并行任务执行。
+- 线程间通过共享内存方式进行通信，线程等待获取前驱的任务执行结果。
 
 ## 环境要求
 

@@ -1,7 +1,7 @@
 package cd.wangyong.simple_pipeline;
 
 /**
- * pipelne值对象
+ * pipeline值对象
  * @author andy
  * @since 2020/10/23
  */
